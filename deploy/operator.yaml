@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samba4-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: samba4-operator
+  template:
+    metadata:
+      labels:
+        name: samba4-operator
+    spec:
+      serviceAccountName: samba4-operator
+      containers:
+        - name: samba4-operator
+          # Replace this with the built image name
+          image: REPLACE_IMAGE
+          command:
+          - samba4-operator
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "samba4-operator"
